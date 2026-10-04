@@ -12,6 +12,8 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+
+    public Text maxScoreText;
     public GameObject GameOverText;
 
     private bool m_Started = false;
@@ -26,12 +28,14 @@ public class MainManager : MonoBehaviour
     void Awake()
     {
         m_LaunchAction = new InputAction("Launch", InputActionType.Button, "<Keyboard>/space");
+        
     }
 
     // MIGRATED: enable the action while the component is active
     void OnEnable()
     {
         m_LaunchAction.Enable();
+        UpdateMaxScoreText();
     }
 
     // MIGRATED: disable the action when the component is inactive
@@ -57,6 +61,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        
     }
 
     private void Update()
@@ -79,6 +85,7 @@ public class MainManager : MonoBehaviour
             if (m_LaunchAction.WasPressedThisFrame()) // MIGRATED: was Input.GetKeyDown(KeyCode.Space)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
             }
         }
     }
@@ -87,11 +94,24 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+
+        if (m_Points > MenuManager.Instance.MaxScore) // only update if it's actually a new best
+        {
+            MenuManager.Instance.MaxScore = m_Points;
+        }
+
+        UpdateMaxScoreText(); // refresh the displayed text whenever it might have changed
     }
 
+    void UpdateMaxScoreText()
+    {
+        maxScoreText.text = $"Best Score : {MenuManager.Instance.playerName} : {MenuManager.Instance.MaxScore}";
+    }
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    
 }
