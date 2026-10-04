@@ -17,6 +17,7 @@ public class DataPersistance : MonoBehaviour
         
     }
 
+
     public void LoadGame()
     {
         MenuManager.Instance.playerName = nameInputField.text;

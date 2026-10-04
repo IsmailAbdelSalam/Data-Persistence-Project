@@ -95,17 +95,13 @@ public class MainManager : MonoBehaviour
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
 
-        if (m_Points > MenuManager.Instance.MaxScore) // only update if it's actually a new best
-        {
-            MenuManager.Instance.MaxScore = m_Points;
-        }
-
-        UpdateMaxScoreText(); // refresh the displayed text whenever it might have changed
+        MenuManager.Instance.SaveHighScore(m_Points, MenuManager.Instance.playerName);
+        UpdateMaxScoreText();
     }
 
     void UpdateMaxScoreText()
     {
-        maxScoreText.text = $"Best Score : {MenuManager.Instance.playerName} : {MenuManager.Instance.MaxScore}";
+        maxScoreText.text = $"Best Score : {MenuManager.Instance.GetHighScoreName()} : {MenuManager.Instance.GetHighScore()}";
     }
     public void GameOver()
     {
